@@ -1,3 +1,5 @@
-.page_view_404 {
-    color: red;
+.page {
+    &:mod(view 404) {
+        color: red;
+    }
 }
