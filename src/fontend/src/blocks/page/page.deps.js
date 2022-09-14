@@ -1,0 +1,7 @@
+({
+    shouldDeps: [
+        "header",
+        "body",
+        "footer",
+    ],
+})

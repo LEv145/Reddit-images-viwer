@@ -1,0 +1,17 @@
+node_modules/
+.DS_Store
+.idea/
+*.iml
+.project
+.svn
+npm-debug.log
+
+# BEM
+.bem/cache/
+.enb/tmp/
+
+src/fontend/build/*
+!src/fontend/build/.gitkeep
+src/fontend/src/bundles*/*/*.*
+!src/fontend/src/bundles*/*/*.bemdecl.js
+src/fontend/src/bundles*/*/*.bemhtml.bemdecl.js
