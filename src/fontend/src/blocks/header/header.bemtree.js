@@ -1,5 +1,3 @@
-block("header")({
-    content: (node, ctx) => [
-        {block: "logo"},
-    ],
-});
+block("header").content()((node, ctx) => (
+    [{block: "logo"}]
+));

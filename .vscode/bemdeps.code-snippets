@@ -1,0 +1,24 @@
+{
+	"default": {
+		"scope": "javascript",
+		"prefix": "bemdeps",
+		"body": [
+			"({",
+			"   shouldDeps: [$1],",
+			"});",
+			"",
+		],
+	},
+	"full": {
+		"scope": "javascript",
+		"prefix": "bemdeps-full",
+		"body": [
+			"({",
+			"   shouldDeps: [$1],",
+			"   mustDeps: [$2],",
+			"   noDeps: [$3],",
+			"});",
+			"",
+		],
+	},
+}

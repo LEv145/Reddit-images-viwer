@@ -1,0 +1,11 @@
+:block(logo) {
+    display: flex;
+    align-items: center;
+
+
+    &:elem(text) {
+        padding-left: 8px;
+
+        color: white;
+    }
+}

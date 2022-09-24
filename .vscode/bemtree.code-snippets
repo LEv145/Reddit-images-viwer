@@ -1,0 +1,11 @@
+{
+	"default": {
+		"scope": "javascript",
+		"prefix": "bemtree",
+		"body": [
+			"block(\"$1\").content()((node, ctx) => (",
+			"    $0",
+			"));",
+		],
+	},
+}

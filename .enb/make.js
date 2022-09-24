@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require("path")
 
 
 const techs = {
@@ -8,21 +8,22 @@ const techs = {
     borschik: require("enb-borschik/techs/borschik"),
     postcss: require("enb-postcss/techs/enb-postcss"),
     postcssPlugins: [
-        // require("postcss-import")(),
+        require("postcss-import")(),
         // require("postcss-each"),
         // require("postcss-for"),
         // require("postcss-simple-vars")(),
         // require("postcss-calc")(),
-        // require("postcss-nested"),
-        // require("rebem-css"),
+        require("postcss-nested"),
+        require("rebem-css"),
         require("postcss-url")({url: "inline"}),
-        // require("autoprefixer")(),
+        require("autoprefixer")(),
     ],
     browserJs: require("enb-js/techs/browser-js"),
-    bemtree: require("enb-bemxjst/techs/bemtree"),
+    // bemtree: require("enb-bemxjst/techs/bemtree"),
+    bemtree: require("./techs/borschik-bemtree"),
     bemhtml: require("enb-bemxjst/techs/bemhtml"),
-};
-const enbBemTechs = require("enb-bem-techs");
+}
+const enbBemTechs = require("enb-bem-techs")
 
 
 const LEVELS = [
@@ -33,12 +34,12 @@ const LEVELS = [
     {path: "node_modules/bem-components/design/common.blocks", check: false},
     {path: "node_modules/bem-components/design/desktop.blocks", check: false},
     "src/fontend/src/blocks",
-];
-const IS_PROD = process.env.YENV === "prod";
+]
+const IS_PROD = process.env.YENV === "prod"
 const ROOT_PATH = "../../../"
-const BUILD_PATH = path.join(ROOT_PATH, "build");
-const STATIC_PATH = path.join(BUILD_PATH, "static");
-const BUNDLES_PATH = path.join(BUILD_PATH, "bundles");
+const BUILD_PATH = path.join(ROOT_PATH, "build")
+const STATIC_PATH = path.join(BUILD_PATH, "static")
+const BUNDLES_PATH = path.join(BUILD_PATH, "bundles")
 
 
 module.exports = function(config) {
@@ -52,6 +53,7 @@ module.exports = function(config) {
                 [enbBemTechs.deps],
                 [enbBemTechs.files],
 
+
                 // css
                 [techs.postcss, {
                     target: "?.css",
@@ -59,15 +61,31 @@ module.exports = function(config) {
                     plugins: techs.postcssPlugins,
                 }],
 
+
                 // bemtree
-                [techs.bemtree, {sourceSuffixes: ["bemtree", "bemtree.js"]}],
+                [techs.bemtree, {
+                    sourceSuffixes: ["bemtree.js"],
+                }],
+                // [techs.borschik, {
+                //     source: "?.bemtree.js",
+                //     target: "?.borschik.bemtree.js",
+                //     freeze: true,
+                //     minify: IS_PROD,
+                // }],
 
                 // templates
                 [techs.bemhtml, {
-                    sourceSuffixes: ["bemhtml", "bemhtml.js"],
+                    sourceSuffixes: ["bemhtml.js"],
                     forceBaseTemplates: true,
                     engineOptions: {elemJsInstances: true},
                 }],
+                [techs.borschik, {
+                    source: "?.bemhtml.js",
+                    target: "?.borschik.bemhtml.js",
+                    freeze: true,
+                    minify: IS_PROD,
+                }],
+
 
                 // client bemhtml
                 [enbBemTechs.depsByTechToBemdecl, {
@@ -104,15 +122,15 @@ module.exports = function(config) {
 
                 [techs.fileCopy, {source: "?.min.js", target: `${STATIC_PATH}/?.min.js`}],
                 [techs.fileCopy, {source: "?.min.css", target: `${STATIC_PATH}/?.min.css`}],
-                [techs.fileCopy, {source: "?.bemhtml.js", target: `${BUNDLES_PATH}/?.bemhtml.js`}],
+                [techs.fileCopy, {source: "?.borschik.bemhtml.js", target: `${BUNDLES_PATH}/?.bemhtml.js`}],
                 [techs.fileCopy, {source: "?.bemtree.js", target: `${BUNDLES_PATH}/?.bemtree.js`}],
-            ]);
+            ])
             nodeConfig.addTargets([
                 `${BUNDLES_PATH}/?.bemtree.js`,
                 `${BUNDLES_PATH}/?.bemhtml.js`,
                 `${STATIC_PATH}/?.min.js`,
                 `${STATIC_PATH}/?.min.css`,
-            ]);
+            ])
         },
-    );
-};
+    )
+}

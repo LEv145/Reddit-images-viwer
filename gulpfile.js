@@ -1,51 +1,39 @@
-const enb = require("enb");
-const gulp = require("gulp");
-const BrowserSync = require("browser-sync");
+const enb = require("enb")
+const gulp = require("gulp")
 
 
-const SOURCE_PATH = "src";
-const browser_sync = BrowserSync.create();
+const SOURCE_PATH = "src/fontend/src"
 
 
-function build_pages() {
-    return enb.make();
-};
-
-// function build_assets() {
-//     return (
-//         gulp
-//         .src(`${SOURCE_PATHS.assets}/**/*`)
-//         .pipe(gulp.dest(`${BUILD_PATH}/assets`))
-//     );
-// }
-
-// function build_static() {
-//     return (
-//         gulp
-//         .src(`${SOURCE_PATHS.static}/**/*`)
-//         .pipe(gulp.dest(`${BUILD_PATH}/static`))
-//     );
-// }
-
-let build = gulp.parallel(build_pages);
-
-// function dev() {
-//     browser_sync.init({server: {baseDir: BUILD_PATH}, open: false});
-//     // Static
-//     gulp.watch(
-//         `${SOURCE_PATH}/**/*`,
-//         gulp.parallel(_reloadbrowser_sync, build),
-//     );
-// }
-
-function _reloadbrowser_sync(next) {
-    browser_sync.reload();
-    next();
+function build() {
+    return enb.make()
 }
 
+function clean() {
+    return enb.make(["clean"])
+}
 
-// exports.build_static = build_static;
-// exports.build_assets = build_assets;
-// exports.build_pages = build_pages;
-exports.build = build;
-// exports.dev = dev;
+function server() {
+    return enb.runServer({port: 3000})
+}
+
+watch = gulp.parallel(
+    build,
+    () => gulp.watch(
+        [`${SOURCE_PATH}/blocks/**/*`, `${SOURCE_PATH}/bundles/*/*.bemdecl.js`],
+        gulp.parallel(build),
+    ),
+)
+
+
+// function _reloadbrowser_sync(next) {
+//     browser_sync.reload()
+//     next()
+// }
+
+
+exports.build = build
+exports.clean = clean
+exports.server = server
+exports.watch = watch
+exports.default = exports.watch

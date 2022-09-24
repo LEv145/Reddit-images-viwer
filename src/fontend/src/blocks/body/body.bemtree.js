@@ -1,5 +1,3 @@
-block("body")({
-    content: (node, ctx) => [
-        {block: node.data.view},
-    ],
-});
+block("body").content()((node, ctx) => (
+    [{block: node.data.view}]
+));

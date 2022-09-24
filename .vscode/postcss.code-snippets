@@ -1,0 +1,12 @@
+{
+	"default": {
+		"scope": "postcss,scss",
+		"prefix": "postcss",
+		"body": [
+			":block($1) {",
+            "    $0",
+            "}",
+			"",
+		],
+	},
+}

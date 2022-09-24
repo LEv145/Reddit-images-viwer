@@ -1,0 +1,13 @@
+:block(post) {
+    padding-top: 8px;
+
+    &:elem(subtitle) {
+        color: rgb(129, 131, 132);
+        font-size: 12px;
+    }
+
+    &:elem(title-text) {
+        font-size: 18px;
+        color: rgb(215, 218, 220);
+    }
+}

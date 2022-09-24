@@ -6,7 +6,6 @@
     "last 2 versions"
   ],
   "dependencies": {
-    "browser-sync": "^2.27.10",
     "compression": "^1.7.4",
     "connect-slashes": "^1.4.0",
     "cookie-parser": "^1.4.6",
@@ -19,11 +18,12 @@
     "gulp": "^4.0.2",
     "morgan": "^1.10.0",
     "passport": "^0.6.0",
+    "remove": "^0.1.5",
     "serve-favicon": "^2.5.0",
     "serve-static": "^1.15.0"
   },
   "devDependencies": {
-    "autoprefixer": "^7.1.1",
+    "autoprefixer": "^7.2.6",
     "bem": "^2.0.0",
     "bem-components": "^6.0.1",
     "bem-core": "^4.2.1",
@@ -34,8 +34,11 @@
     "enb-borschik": "^3.0.0",
     "enb-js": "^1.1.1",
     "enb-postcss": "^3.0.0",
+    "postcss-import": "^15.0.0",
+    "postcss-nested": "^5.0.6",
     "postcss-url": "^10.1.3",
     "rebem-css": "^0.2.0",
+    "tmp": "^0.2.1",
     "ym": "^0.1.2"
   }
 }

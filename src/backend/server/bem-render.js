@@ -1,6 +1,6 @@
-const path = require("path");
-const decache = require("decache");
-const express = require("express");
+const path = require("path")
+const decache = require("decache")
+const express = require("express")
 
 
 /**
@@ -9,11 +9,11 @@ const express = require("express");
  * @returns
  */
 function _evalFile(filename) {
-    decache(filename);
+    decache(filename)
     // Fixes memory leak
     // clean module from links to previous parsed files
-    module.children = module.children.filter(item => item.id !== filename);
-    return require(filename);
+    module.children = module.children.filter(item => item.id !== filename)
+    return require(filename)
 }
 
 
@@ -25,30 +25,28 @@ class BemRender {
      * @returns
      */
     constructor(_data) {
-        this._path = _data.path;
-        this._isDev = _data.isDev;
+        this._path = _data.path
+        this._isDev = _data.isDev
     }
 
     /**
+     * @param {express.Request} request
+     * @param {express.response} response
      * @param {object} _data
      * @param {string} _data.bundleName
-     * @param {express.Request} _data.request
-     * @param {express.response} _data.response
      * @param {object} _data.data
      * @param {object} _data.ctx
      */
-    read(_data) {
-        const bundleName = _data.bundleName;
-        const request = _data.request;
-        const response = _data.response;
-        const data = _data.data;
-        const ctx = _data.ctx;
+    read(request, response, _data) {
+        const bundleName = _data.bundleName
+        const data = _data.data
+        const ctx = _data.ctx
 
-        const query = request.query;
-        const templates = this._getTemplates(bundleName);
+        const query = request.query
+        const templates = this._getTemplates(bundleName)
 
         if (this.isDev && query.json) {
-            return response.send(`<pre>${JSON.stringify(data, null, 4)}</pre>`);
+            return response.send(`<pre>${JSON.stringify(data, null, 4)}</pre>`)
         }
 
         const bemtreeCtx = {
@@ -60,29 +58,29 @@ class BemRender {
                 {url: request._parsedUrl, csrf: request.csrfToken()},
                 data,
             )
-        };
+        }
 
-        let bemjson;
+        let bemjson
         try {
-            bemjson = templates.BEMTREE.apply(bemtreeCtx);
+            bemjson = templates.BEMTREE.apply(bemtreeCtx)
         } catch(error) {
-            console.error("BEMTREE error", error.stack);
-            console.trace("server stack");
-            return response.sendStatus(500);
+            console.error("BEMTREE error", error.stack)
+            console.trace("server stack")
+            return response.sendStatus(500)
         }
 
         if (this.isDev && query.bemjson) {
-            return response.send(`<pre>${JSON.stringify(bemjson, null, 4)}</pre>`);
+            return response.send(`<pre>${JSON.stringify(bemjson, null, 4)}</pre>`)
         }
 
-        let html;
+        let html
         try {
-            html = templates.BEMHTML.apply(bemjson);
+            html = templates.BEMHTML.apply(bemjson)
         } catch(error) {
-            console.error("BEMHTML error", error.stack);
-            return response.sendStatus(500);
+            console.error("BEMHTML error", error.stack)
+            return response.sendStatus(500)
         }
-        response.send(html);
+        response.send(html)
     }
 
     /**
@@ -94,11 +92,11 @@ class BemRender {
         return {
             BEMTREE: _evalFile(path.join(this._path, `${bundleName}.bemtree.js`)).BEMTREE,
             BEMHTML: _evalFile(path.join(this._path, `${bundleName}.bemhtml.js`)).BEMHTML,
-        };
+        }
     }
 }
 
 
 module.exports = {
     BemRender: BemRender,
-};
+}

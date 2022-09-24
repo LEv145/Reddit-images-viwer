@@ -1,50 +1,48 @@
-const fs = require("fs");
-const path = require("path");
+const path = require("path")
 
 // Express.js
-const express = require("express");
+const express = require("express")
 // Middlewares
-const faviconMiddleware = require("serve-favicon");  // Favicon
-const morganMiddleware = require("morgan");  // HTTP request logger
-const serveStaticMiddleware = require("serve-static");  // Static
-const cookieParserMiddleware = require("cookie-parser");  // Cookies
-const expressSessionMiddleware = require("express-session");  // Sessions
-const slashesMiddleware = require("connect-slashes");  // Trailing slash redirect middleware for Connect and Express.js
-const passportMiddleware = require("passport");  // Simple, unobtrusive authenticatio
-const csrfMiddleware = require("csurf");  // CSRF
-const compressionMiddleware = require("compression");  // Compression response
+const faviconMiddleware = require("serve-favicon")  // Favicon
+const morganMiddleware = require("morgan")  // HTTP request logger
+const serveStaticMiddleware = require("serve-static")  // Static
+const cookieParserMiddleware = require("cookie-parser")  // Cookies
+const expressSessionMiddleware = require("express-session")  // Sessions
+const slashesMiddleware = require("connect-slashes")  // Trailing slash redirect middleware for Connect and Express.js
+const passportMiddleware = require("passport")  // Simple, unobtrusive authenticatio
+const csrfMiddleware = require("csurf")  // CSRF
+const compressionMiddleware = require("compression")  // Compression response
 // Debug
-const debugHttp = require("debug-http");
+const debugHttp = require("debug-http")
 // Etc.
-const errorHandler = require("errorhandler");
+const errorHandler = require("errorhandler")
 
-const config = require("./config");
-const bemRender_ = require("./bem-render");
+const config = require("./config")
+const bemRender_ = require("./bem-render")
 
 
-const _FRONTEND_PATH = path.resolve(__dirname, "..", "..", config.fontendPath);
-const _FRONTEND_BUILD_PATH = path.join(_FRONTEND_PATH, "build");
-const FRONTEND_STATIC_PATH = path.join(_FRONTEND_BUILD_PATH, "static");
-const FRONTEND_BUNDLES_PATH = path.join(_FRONTEND_BUILD_PATH, "bundles");
+const _FRONTEND_PATH = path.resolve(__dirname, "..", "..", config.fontendPath)
+const _FRONTEND_BUILD_PATH = path.join(_FRONTEND_PATH, "build")
+const FRONTEND_STATIC_PATH = path.join(_FRONTEND_BUILD_PATH, "static")
+const FRONTEND_BUNDLES_PATH = path.join(_FRONTEND_BUILD_PATH, "bundles")
 
-const IS_DEV = process.env.NODE_ENV === "dev";
-const PORT = process.env.PORT || config.defaultPort;
+const IS_DEV = process.env.NODE_ENV === "dev"
+const PORT = process.env.PORT || config.defaultPort
 
 const bemRender = new bemRender_.BemRender({
     path: FRONTEND_BUNDLES_PATH,
     isDev: IS_DEV,
-});
-const app = express();
+})
+const app = express()
 
 
-debugHttp();
+debugHttp()
 
-passportMiddleware.serializeUser((user, done) => done(null, JSON.stringify(user)));
-passportMiddleware.deserializeUser((user, done) => done(null, JSON.parse(user)));
+passportMiddleware.serializeUser((user, done) => done(null, JSON.stringify(user)))
+passportMiddleware.deserializeUser((user, done) => done(null, JSON.parse(user)))
 
 
-(
-    app
+app
     .disable("x-powered-by")
     .enable("trust proxy")
     .use(compressionMiddleware())
@@ -60,11 +58,11 @@ passportMiddleware.deserializeUser((user, done) => done(null, JSON.parse(user)))
     .use(passportMiddleware.initialize())
     .use(passportMiddleware.session())
     .use(csrfMiddleware())
-);
+
 
 if (IS_DEV){
-    app.use(slashesMiddleware());  // NOTE: conflicts with livereload
-    app.use(errorHandler());
+    app.use(slashesMiddleware())  // NOTE: conflicts with livereload
+    app.use(errorHandler())
 }
 
 app.get(
@@ -75,10 +73,8 @@ app.get(
      */
     function(requets, response)
     {
-        bemRender.read({
+        bemRender.read(requets, response, {
             bundleName: "index",
-            request: requets,
-            response: response,
             data: {
                 view: "page-index",
                 title: "Main page",
@@ -87,9 +83,9 @@ app.get(
                     og: {url: "https://site.com", siteName: "Site name"},
                 },
             },
-        });
+        })
     },
-);
+)
 
 app.get(
     "/ping/",
@@ -98,9 +94,9 @@ app.get(
      * @param {express.Response} response
      */
     function(requets, response) {
-        response.send("ok");
+        response.send("ok")
     },
-);
+)
 
 app.get(
     "*",
@@ -109,20 +105,18 @@ app.get(
      * @param {express.Response} response
      */
     function(requets, response) {
-        response.status(404);
-        return bemRender.read({
+        response.status(404)
+        return bemRender.read(requets, response, {
             bundleName: "index",
-            request: requets,
-            response: response,
             data: {view: "404"},
-        });
+        })
     },
-);
+)
 
 app.listen(
     PORT,
     function() {
-        console.log(`Listening on port ${this.address().port}`);
-        console.log(`Dev mode: ${IS_DEV}`);
+        console.log(`Listening on port ${this.address().port}`)
+        console.log(`Dev mode: ${IS_DEV}`)
     }
-);
+)

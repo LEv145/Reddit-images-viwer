@@ -1,5 +1,3 @@
-block("footer")({
-    content: (node, ctx) => [
-        "footer content",
-    ],
-});
+block("footer").content()((node, ctx) => (
+    "footer"
+));
