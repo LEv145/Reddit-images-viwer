@@ -1,10 +1,10 @@
-const bemtree = require("enb-bemxjst/techs/bemtree")
+const bemhtml = require("enb-bemxjst/techs/bemhtml")
 const borschik_includer = require("../modules/borschik-includer")
 
 
 module.exports = (
-    bemtree.buildFlow()
-    .name("borschik-bemtree")
+    bemhtml.buildFlow()
+    .name("borschik-bemhtml")
 
     .defineOption("borschikMinimize", true)
     .defineOption("borschikFreeze", true)
@@ -14,7 +14,7 @@ module.exports = (
 
     .builder(function (fileList) {
         // don't add fat wrapper code of bem-xjst
-        if (!this._forceBaseTemplates && fileList.length === 0) return this._mockBEMTREE()
+        if (!this._forceBaseTemplates && fileList.length === 0) return this._mockBEMHTML()
 
         const borschikIncluder = new borschik_includer.BorschikIncluder({
             minimize: this._borschikMinimize,
@@ -29,7 +29,7 @@ module.exports = (
             this._readFiles(filenames)
             .then(this._processSources, this)
             .then(borschikIncluder.use, this)
-            .then(this._compileBEMTREE, this)
+            .then(this._compileBEMHTML, this)
         )
     })
     .createTech()

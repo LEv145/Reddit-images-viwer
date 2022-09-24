@@ -19,9 +19,8 @@ const techs = {
         require("autoprefixer")(),
     ],
     browserJs: require("enb-js/techs/browser-js"),
-    // bemtree: require("enb-bemxjst/techs/bemtree"),
     bemtree: require("./techs/borschik-bemtree"),
-    bemhtml: require("enb-bemxjst/techs/bemhtml"),
+    bemhtml: require("./techs/borschik-bemhtml"),
 }
 const enbBemTechs = require("enb-bem-techs")
 
