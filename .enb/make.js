@@ -19,8 +19,8 @@ const techs = {
         require("autoprefixer")(),
     ],
     browserJs: require("enb-js/techs/browser-js"),
-    bemtree: require("./techs/borschik-bemtree"),
-    bemhtml: require("./techs/borschik-bemhtml"),
+    borschikBemtree: require("./techs/borschik-bemtree"),
+    borschikBemhtml: require("./techs/borschik-bemhtml"),
 }
 const enbBemTechs = require("enb-bem-techs")
 
@@ -62,7 +62,7 @@ module.exports = function(config) {
 
 
                 // bemtree
-                [techs.bemtree, {
+                [techs.borschikBemtree, {
                     sourceSuffixes: ["bemtree.js"],
                 }],
                 // [techs.borschik, {
@@ -73,18 +73,11 @@ module.exports = function(config) {
                 // }],
 
                 // templates
-                [techs.bemhtml, {
+                [techs.borschikBemhtml, {
                     sourceSuffixes: ["bemhtml.js"],
                     forceBaseTemplates: true,
                     engineOptions: {elemJsInstances: true},
                 }],
-                [techs.borschik, {
-                    source: "?.bemhtml.js",
-                    target: "?.borschik.bemhtml.js",
-                    freeze: true,
-                    minify: IS_PROD,
-                }],
-
 
                 // client bemhtml
                 [enbBemTechs.depsByTechToBemdecl, {
@@ -101,7 +94,7 @@ module.exports = function(config) {
                     filesTarget: "?.bemhtml.files",
                     dirsTarget: "?.bemhtml.dirs",
                 }],
-                [techs.bemhtml, {
+                [techs.borschikBemhtml, {
                     target: "?.browser.bemhtml.js",
                     filesTarget: "?.bemhtml.files",
                     sourceSuffixes: ["bemhtml", "bemhtml.js"],
@@ -121,7 +114,7 @@ module.exports = function(config) {
 
                 [techs.fileCopy, {source: "?.min.js", target: `${STATIC_PATH}/?.min.js`}],
                 [techs.fileCopy, {source: "?.min.css", target: `${STATIC_PATH}/?.min.css`}],
-                [techs.fileCopy, {source: "?.borschik.bemhtml.js", target: `${BUNDLES_PATH}/?.bemhtml.js`}],
+                [techs.fileCopy, {source: "?.bemhtml.js", target: `${BUNDLES_PATH}/?.bemhtml.js`}],
                 [techs.fileCopy, {source: "?.bemtree.js", target: `${BUNDLES_PATH}/?.bemtree.js`}],
             ])
             nodeConfig.addTargets([
