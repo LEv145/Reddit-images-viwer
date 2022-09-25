@@ -1,5 +1,5 @@
 const bemtree = require("enb-bemxjst/techs/bemtree")
-const borschik_includer = require("../modules/borschik-includer")
+const borschik_includer = require("borschik-includer")
 
 
 module.exports = (
