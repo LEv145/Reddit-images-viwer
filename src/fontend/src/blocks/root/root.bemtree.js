@@ -1,3 +1,4 @@
+// @ts-ignore
 block("root").replace()((node, ctx) => {
     const data = ctx.data
     node.data = ctx.data

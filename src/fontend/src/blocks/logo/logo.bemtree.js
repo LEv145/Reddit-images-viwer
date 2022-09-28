@@ -1,3 +1,4 @@
+// @ts-ignore
 block("logo").content()((node, ctx) => (
     [
         {
@@ -10,7 +11,7 @@ block("logo").content()((node, ctx) => (
         },
         {
             elem: "text",
-            content: "RIV"
+            content: "RIV",
         },
     ]
 ));

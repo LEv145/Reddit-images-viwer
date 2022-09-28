@@ -1,3 +1,3 @@
 ({
-   shouldDeps: ["tag"],
+   shouldDeps: ["card-post"],
 });

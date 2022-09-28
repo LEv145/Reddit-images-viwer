@@ -1,13 +1,26 @@
 :block(post) {
-    padding-top: 8px;
+    overflow: hidden;
 
     &:elem(subtitle) {
         color: rgb(129, 131, 132);
         font-size: 12px;
     }
 
-    &:elem(title-text) {
-        font-size: 18px;
-        color: rgb(215, 218, 220);
+    &:elem(title) {
+        margin-top: 5px;
+
+        display: flex;
+        align-items: center;
+    }
+
+        &:elem(title-text) {
+            margin-left: 5px;
+
+            font-size: 18px;
+            color: rgb(215, 218, 220);
+        }
+
+    &:elem(image) {
+        margin-top: 5px;
     }
 }

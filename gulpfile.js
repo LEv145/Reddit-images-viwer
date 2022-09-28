@@ -17,7 +17,7 @@ function server() {
     return enb.runServer({port: 3000})
 }
 
-watch = gulp.parallel(
+let watch = gulp.parallel(
     build,
     () => gulp.watch(
         [`${SOURCE_PATH}/blocks/**/*`, `${SOURCE_PATH}/bundles/*/*.bemdecl.js`],
