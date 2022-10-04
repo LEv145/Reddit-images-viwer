@@ -1,5 +1,4 @@
-const bemtree = require("enb-bemxjst/techs/bemtree")
-const bemxjst_utils = require("./utils/bemxjst")
+const borschik_includer = require("borschik-includer")
 
 
 module.exports = (
@@ -12,7 +11,7 @@ module.exports = (
     .defineOption("borschikTech", null)
     .defineOption("borschikTechOptions", null)
 
-    .methods({_processSources: bemxjst_utils._processSources})
+    .methods({_processSources: borschik_includer.processSources})
 
     .createTech()
 )

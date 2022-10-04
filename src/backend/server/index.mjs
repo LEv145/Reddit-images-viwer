@@ -1,7 +1,6 @@
 import path from "path"
-import url from "url"
 
-// Express.js
+// ######### Express.js #########
 import express from "express"
 // Middlewares
 import faviconMiddleware from "serve-favicon"  // Favicon
@@ -17,119 +16,118 @@ import compressionMiddleware from "compression"  // Compression response
 import debugHttp from "debug-http"
 // Etc.
 import errorHandler from "errorhandler"
+// ######### Express.js #########
+import {open} from "sqlite"
+import sqlite3 from "sqlite3"
 
-import config from "./config.mjs"
+import {ConfigFactory} from "./config.mjs"
 import {BemRender} from "./bem-render.mjs"
-import {RedditService} from "./services/reddit.mjs"
 
 
-const _DIRNAME = path.dirname(url.fileURLToPath(import.meta.url))
-const _FRONTEND_PATH = path.resolve(_DIRNAME, "..", "..", config.fontendPath)
-const _FRONTEND_BUILD_PATH = path.join(_FRONTEND_PATH, "dist")
+async function main() {
+    const config = new ConfigFactory().get()
+    const app = express()
+    const db = await open({
+        filename: path.join(process.cwd(), config.databasePath),
+        driver: sqlite3.Database,
+    })
 
-const FRONTEND_STATIC_PATH = path.join(_FRONTEND_BUILD_PATH, "static")
-const FRONTEND_BUNDLES_PATH = path.join(_FRONTEND_BUILD_PATH, "bundles")
+    const _frontendPath = path.resolve(process.cwd(), config.fontendPath)
+    const _frontendBuildPath = path.join(_frontendPath, "dist")
+    const frontendStaticPath = path.join(_frontendBuildPath, "static")
+    const frontendBundlesPath = path.join(_frontendBuildPath, "bundles")
 
-const IS_DEV = process.env.NODE_ENV === "dev"
-const PORT = process.env.PORT || config.defaultPort
-
-const bemRender = new BemRender({
-    path: FRONTEND_BUNDLES_PATH,
-    isDev: IS_DEV,
-})
-const app = express()
-
-
-debugHttp()
-
-passport.serializeUser((user, done) => done(null, JSON.stringify(user)))
-passport.deserializeUser((user, done) => done(null, JSON.parse(user)))
+    const bemRender = new BemRender({path: frontendBundlesPath, isDev: config.isDev})
 
 
-app
-    .disable("x-powered-by")
-    .enable("trust proxy")
-    .use(compressionMiddleware())
-    .use(faviconMiddleware(path.join(FRONTEND_STATIC_PATH, "favicon.ico")))
-    .use(serveStaticMiddleware(FRONTEND_STATIC_PATH))
-    .use(morganMiddleware("combined"))
-    .use(cookieParserMiddleware())
-    .use(expressSessionMiddleware({
-        resave: true,
-        saveUninitialized: true,
-        secret: config.sessionSecret
-    }))
-    .use(passport.initialize())
-    .use(passport.session())
-    .use(csrfMiddleware())
+    const posts = await db.all("SELECT * FROM Posts")
+    await db.close()
 
 
-if (IS_DEV){
-    app.use(slashesMiddleware())  // NOTE: conflicts with livereload
-    app.use(errorHandler())
+    debugHttp()
+
+
+    passport.serializeUser((user, done) => done(null, JSON.stringify(user)))
+    passport.deserializeUser((user, done) => done(null, JSON.parse(user)))
+
+
+    app
+        .disable("x-powered-by")
+        .enable("trust proxy")
+        .use(compressionMiddleware())
+        .use(faviconMiddleware(path.join(frontendStaticPath, "favicon.ico")))
+        .use(serveStaticMiddleware(frontendStaticPath))
+        .use(morganMiddleware("combined"))
+        .use(cookieParserMiddleware())
+        .use(expressSessionMiddleware({
+            resave: true,
+            saveUninitialized: true,
+            secret: config.sessionSecret
+        }))
+        .use(passport.initialize())
+        .use(passport.session())
+        .use(csrfMiddleware())
+
+    if (config.isDev){
+        app
+            .use(slashesMiddleware())  // NOTE: conflicts with browser livereload
+            .use(errorHandler())
+    }
+
+
+    app.get(
+        "/",
+        /**
+         * @param {express.Request} requets
+         * @param {express.Response} response
+         */
+        async function(requets, response){
+            bemRender.read(requets, response, {
+                bundleName: "index",
+                data: {
+                    view: "page-index",
+                    title: "Main page",
+                    meta: {
+                        description: "Page description",
+                        og: {url: "https://site.com", siteName: "Site name"},
+                    },
+                    posts: posts,
+                },
+            })
+        },
+    )
+    app.get(
+        "/ping/",
+        /**
+         * @param {express.Request} requets
+         * @param {express.Response} response
+         */
+        function(requets, response) {
+            response.send("ok")
+        },
+    )
+    app.get(
+        "*",
+        /**
+         * @param {express.Request} requets
+         * @param {express.Response} response
+         */
+        async function(requets, response) {
+            response.status(404)
+            bemRender.read(requets, response, {
+                bundleName: "index",
+                data: {view: "404"},
+            })
+        },
+    )
+    app.listen(
+        config.port,
+        function() {
+            console.log(`Listening on port: ${this.address().port}`)
+            console.log(`Dev mode: ${config.isDev}`)
+        }
+    )
 }
 
-app.get(
-    "/",
-    /**
-     * @param {express.Request} requets
-     * @param {express.Response} response
-     */
-    async function(requets, response){
-        // let redditService = new RedditService({
-        //     userAgent: config.reddit.userAgent,
-        //     clientId: config.reddit.clientId,
-        //     clientSecret: config.reddit.clientSecret,
-        //     username: config.reddit.username,
-        //     password: config.reddit.password,
-        // })
-        // let posts = await redditService.getPosts({subredditName: "furry", count: 10})
 
-        bemRender.read(requets, response, {
-            bundleName: "index",
-            data: {
-                view: "page-index",
-                title: "Main page",
-                meta: {
-                    description: "Page description",
-                    og: {url: "https://site.com", siteName: "Site name"},
-                },
-                // posts: posts,
-            },
-        })
-    },
-)
-
-app.get(
-    "/ping/",
-    /**
-     * @param {express.Request} requets
-     * @param {express.Response} response
-     */
-    function(requets, response) {
-        response.send("ok")
-    },
-)
-
-app.get(
-    "*",
-    /**
-     * @param {express.Request} requets
-     * @param {express.Response} response
-     */
-    async function(requets, response) {
-        response.status(404)
-        bemRender.read(requets, response, {
-            bundleName: "index",
-            data: {view: "404"},
-        })
-    },
-)
-
-app.listen(
-    PORT,
-    function() {
-        console.log(`Listening on port ${this.address().port}`)
-        console.log(`Dev mode: ${IS_DEV}`)
-    }
-)
+main()

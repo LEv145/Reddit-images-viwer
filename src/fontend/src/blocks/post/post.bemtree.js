@@ -6,26 +6,28 @@
  */
 
 // @ts-ignore
-block("post").content()((node, ctx) => (
-    [
-        {elem: "subtitle", content: ctx.subtitle},
-        {
-            elem: "title",
-            content: [
-                {
-                    mix: [{block: "post", elem: "title-tag"}],
-                    block: "tag",
-                    content: ctx.tag_,
-                },
-                {elem: "title-text", content: ctx.title},
-            ]
-        },
+block("post").content()((node, ctx) => {
+    const data = ctx.data
+
+    const result = [
+        {elem: "subtitle", content: data.subtitle},
+        {elem: "title", content: [{elem: "title-text", content: data.title}]},
         {
             mix: [{block: "post", elem: "image"}],
             block: "image",
-            url: ctx.url,
+            url: data.url,
             width: 512,
             height: 512,
         },
     ]
-));
+
+    if (data.tag !== undefined) {
+        result[1].content.unshift({
+            mix: [{block: "post", elem: "title-tag"}],
+            block: "tag",
+            content: data.tag,
+        })
+    }
+
+    return result
+});

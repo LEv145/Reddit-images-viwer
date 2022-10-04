@@ -6,8 +6,6 @@ block("root").replace()((node, ctx) => {
     const meta = data.meta || {}
     const og = meta.og || {}
 
-    if (ctx.context) return ctx.context
-
     return {
         block: "page",
         title: data.title,

@@ -21,17 +21,12 @@ export class BemRender {
     /**
      * @param {express.Request} request
      * @param {express.response} response
-     * @param {object} _data
-     * @param {string} _data.bundleName
-     * @param {object=} _data.data
-     * @param {object=} _data.ctx
+     * @param {{bundleName: string, data: object}} _data
      */
     read(request, response, _data) {
         const bundleName = _data.bundleName
         const data = _data.data || {}
-        const ctx = _data.ctx || {}
-
-        const parsedUrl = parseUrl(request)
+        const requestParsedUrl = parseUrl(request)
         const query = request.query
         const templates = this._getTemplates(bundleName)
 
@@ -41,9 +36,8 @@ export class BemRender {
 
         const bemtreeCtx = {
             block: "root",
-            context: ctx,
             // extend with data needed for all routes
-            data: Object.assign({}, {url: parsedUrl, csrf: request.csrfToken()}, data)
+            data: Object.assign({}, {url: requestParsedUrl, csrf: request.csrfToken()}, data)
         }
 
         let bemjson
@@ -80,8 +74,12 @@ export class BemRender {
             BEMHTML: this._evalFile(path.join(this._path, `${bundleName}.bemhtml.js`)).BEMHTML,
         }
     }
-
+    /**
+     *
+     * @param {string} filename
+     * @returns
+     */
     _evalFile(filename) {
-        return nodeEval(fs.readFileSync(filename, "utf8"), filename);
+        return nodeEval(fs.readFileSync(filename, "utf8"), filename)
     }
 }
