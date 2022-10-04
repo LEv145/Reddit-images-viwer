@@ -1,3 +1,4 @@
+const bemhtml = require("enb-bemxjst/techs/bemhtml")
 const borschik_includer = require("borschik-includer")
 
 

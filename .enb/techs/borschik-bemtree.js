@@ -1,3 +1,4 @@
+const bemtree = require("enb-bemxjst/techs/bemtree")
 const borschik_includer = require("borschik-includer")
 
 

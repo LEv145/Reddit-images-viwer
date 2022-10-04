@@ -36,7 +36,7 @@
     "bem-components": "^6.0.1",
     "bem-core": "^4.2.1",
     "bem-tools-create": "^2.2.0",
-    "borschik-includer": "^0.2.4",
+    "borschik-includer": "^0.2.6",
     "enb": "^1.5.1",
     "enb-bem-techs": "^2.2.2",
     "enb-bemxjst": "^8.10.6",
