@@ -16,8 +16,8 @@ src/fontend/src/bundles*/*/*.*
 !src/fontend/src/bundles*/*/*.bemdecl.js
 src/fontend/src/bundles*/*/*.bemhtml.bemdecl.js
 
-# Config
-config.env
+# Shell
+shell.sh
 
 # Database
 database.sql
