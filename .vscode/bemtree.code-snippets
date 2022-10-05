@@ -3,6 +3,7 @@
 		"scope": "javascript",
 		"prefix": "bemtree",
 		"body": [
+			"// @ts-ignore",
 			"block(\"$1\").content()((node, ctx) => (",
 			"    $0",
 			"));",

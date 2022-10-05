@@ -36,7 +36,7 @@ const LEVELS = [
 ]
 const IS_PROD = process.env.YENV === "prod"
 const ROOT_PATH = "../../../"
-const BUILD_PATH = path.join(ROOT_PATH, "build")
+const BUILD_PATH = path.join(ROOT_PATH, "dist")
 const STATIC_PATH = path.join(BUILD_PATH, "static")
 const BUNDLES_PATH = path.join(BUILD_PATH, "bundles")
 
@@ -80,32 +80,35 @@ module.exports = function(config) {
                 }],
 
                 // client bemhtml
-                [enbBemTechs.depsByTechToBemdecl, {
-                    target: "?.bemhtml.bemdecl.js",
-                    sourceTech: "js",
-                    destTech: "bemhtml",
-                }],
-                [enbBemTechs.deps, {
-                    target: "?.bemhtml.deps.js",
-                    bemdeclFile: "?.bemhtml.bemdecl.js",
-                }],
-                [enbBemTechs.files, {
-                    depsFile: "?.bemhtml.deps.js",
-                    filesTarget: "?.bemhtml.files",
-                    dirsTarget: "?.bemhtml.dirs",
-                }],
-                [techs.borschikBemhtml, {
-                    target: "?.browser.bemhtml.js",
-                    filesTarget: "?.bemhtml.files",
-                    sourceSuffixes: ["bemhtml", "bemhtml.js"],
-                    engineOptions: {elemJsInstances: true},
-                }],
+                // [enbBemTechs.depsByTechToBemdecl, {
+                //     target: "?.bemhtml.bemdecl.js",
+                //     sourceTech: "js",
+                //     destTech: "bemhtml",
+                // }],
+                // [enbBemTechs.deps, {
+                //     target: "?.bemhtml.deps.js",
+                //     bemdeclFile: "?.bemhtml.bemdecl.js",
+                // }],
+                // [enbBemTechs.files, {
+                //     depsFile: "?.bemhtml.deps.js",
+                //     filesTarget: "?.bemhtml.files",
+                //     dirsTarget: "?.bemhtml.dirs",
+                // }],
+                // [techs.borschikBemhtml, {
+                //     target: "?.browser.bemhtml.js",
+                //     filesTarget: "?.bemhtml.files",
+                //     sourceSuffixes: ["bemhtml", "bemhtml.js"],
+                //     engineOptions: {elemJsInstances: true},
+                // }],
 
                 // js
                 [techs.browserJs, {includeYM: true}],
                 [techs.fileMerge, {
                     target: "?.js",
-                    sources: ["?.browser.js", "?.browser.bemhtml.js"],
+                    sources: [
+                        "?.browser.js",
+                        //"?.browser.bemhtml.js"
+                    ],
                 }],
 
                 // borschik

@@ -1,0 +1,11 @@
+:block(page-index) {
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &:elem(card-post) {
+        margin-top: 10px;
+    }
+}

@@ -1,3 +1,4 @@
+// @ts-ignore
 block("page").content()((node, ctx) => (
     [
         {block: "header"},

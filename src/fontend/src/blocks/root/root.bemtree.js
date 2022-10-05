@@ -1,11 +1,10 @@
+// @ts-ignore
 block("root").replace()((node, ctx) => {
     const data = ctx.data
     node.data = ctx.data
 
     const meta = data.meta || {}
     const og = meta.og || {}
-
-    if (ctx.context) return ctx.context
 
     return {
         block: "page",

@@ -10,8 +10,14 @@ npm-debug.log
 .bem/cache/
 .enb/tmp/
 
-src/fontend/build/*
-!src/fontend/build/.gitkeep
+src/fontend/dist/*
+!src/fontend/dist/.gitkeep
 src/fontend/src/bundles*/*/*.*
 !src/fontend/src/bundles*/*/*.bemdecl.js
 src/fontend/src/bundles*/*/*.bemhtml.bemdecl.js
+
+# Shell
+shell.sh
+
+# Database
+database.sql
